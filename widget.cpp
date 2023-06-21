@@ -52,12 +52,12 @@ void Widget::on_pushButton_clicked()
         QString api = "/control";
         socket->createWebsocketClient(ip,port,api);
 
-        //调用该对象show方法show出界面
-//        myhomep->show();
-        //发送信号
-//        emit signal_mysignall(ip,port.toInt());
-        //调用当前对象中的close方法，关闭当前界面
-//        this->close();
+//        调用该对象show方法show出界面
+        myhomep->show();
+//        发送信号
+        emit signal_mysignall(ip,port.toInt());
+//        调用当前对象中的close方法，关闭当前界面
+        this->close();
 
     }
 }

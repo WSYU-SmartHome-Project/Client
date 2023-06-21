@@ -15,9 +15,6 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
-    static void closeLogin(){
-        Widget::close();
-    };
 
 signals :
     void signal_mysignall(QString ip,int port);

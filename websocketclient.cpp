@@ -77,10 +77,6 @@ void WebSocketClient::onTextReceived(QString msg){
 
     if(rest->status == 301){//入池完成
         qDebug() << "连接完成";
-        myhomep = new MyHome();
-        myhomep->show();
-
-        Widget::closeLogin();
 
     }
 
