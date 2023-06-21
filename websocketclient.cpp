@@ -4,7 +4,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "device.h"
-#include "widget.h"
 
 QWebSocket *WebSocketClient::dataRecvWS = nullptr;
 
@@ -77,8 +76,51 @@ void WebSocketClient::onTextReceived(QString msg){
 
     if(rest->status == 301){//入池完成
         qDebug() << "连接完成";
+        widget->on_connected();//连接结束，跳转页面
+    }
+
+    if(rest->status == 600){
+        //开灯命令；
+        myhomep->open_light();
+        myhomep->setText(rest->toJson()+"\n");
 
     }
+
+    if(rest->status == 601){
+        //关灯命令；
+        myhomep->close_light();
+        myhomep->setText(rest->toJson()+"\n");
+
+    }
+
+    //切换灯模式
+    if(rest->status == 610){
+        myhomep->switch_mod(0);
+        myhomep->setText(rest->toJson()+"\n");
+    }
+
+    if(rest->status == 620){
+        myhomep->switch_mod(1);
+        myhomep->setText(rest->toJson()+"\n");
+    }
+
+    if(rest->status == 630){
+        myhomep->switch_mod(2);
+        myhomep->setText(rest->toJson()+"\n");
+    }
+
+    if(rest->status == 700){
+        myhomep->open_kongtiao();
+        myhomep->setText(rest->toJson()+"\n");
+
+    }
+
+    if(rest->status == 701){
+        myhomep->close_kongtiao();
+        myhomep->setText(rest->toJson()+"\n");
+
+    }
+
 
 
 }

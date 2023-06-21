@@ -21,6 +21,7 @@ signals :
 
 public slots:
     void slot_swap();
+    void on_connected();
 
 private slots:
     void on_pushButton_clicked();

@@ -15,6 +15,13 @@ class MyHome : public   QWidget
 public:
     explicit MyHome(QWidget *parent = 0);
     ~MyHome();
+    void open_light();
+    void close_light();
+    void setText(QString text);
+    void switch_mod(int mod);
+    void open_kongtiao();
+    void close_kongtiao();
+
 
  //声明一个槽函数，用于接收Widget对象中的数据
  public slots:
@@ -37,7 +44,8 @@ private:
     int kongtiao_on=0;
     int model=0;
     QTcpSocket *tcpsocket;//声明了一个名为tcpsocket的指向QTcpsocket类型的指针
-    void websocketClient();
+
+
 };
 
 #endif // MYHOME_H

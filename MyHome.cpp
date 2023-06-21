@@ -1,5 +1,7 @@
 #include "MyHome.h"
 #include "ui_MyHome.h"
+#include "rest.h"
+#include "websocketclient.h"
 
 MyHome::MyHome(QWidget *parent) :
     QWidget(parent),
@@ -34,27 +36,19 @@ MyHome::~MyHome()
  {
      if(led_on==0)
      {
-         ui->pushButton->setStyleSheet("border-image: url(:/image/button _light open.png)");
-         ui->label_2->setStyleSheet("border-image: url(:/image/light _on.png)");
-         ui->label->setStyleSheet("border-image: url(:/image/home.png)");
-
-         ui->textEdit->insertPlainText("led_on\n");
-
-         led_on=1;
-         QString data1="led_on\n";
-         tcpsocket->write(data1.toUtf8());
+         Rest *open_light = new Rest();
+         open_light->status = 600;
+         open_light->message = "开灯";
+         open_light->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(open_light->toJson());
      }
      else
      {
-         ui->pushButton->setStyleSheet("border-image: url(:/image/butoon _light close.png)");
-         ui->label_2->setStyleSheet("border-image: url(:/image/light _off.png)");
-         ui->label->setStyleSheet("border-image: url(:/image/home_dark.png)");
-
-         ui->textEdit->insertPlainText("led_off\n");
-
-         led_on=0;
-         QString data1="led_off\n";
-         tcpsocket->write(data1.toUtf8());
+         Rest *open_light = new Rest();
+         open_light->status = 601;
+         open_light->message = "关灯";
+         open_light->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(open_light->toJson());
      }
  }
 
@@ -64,25 +58,22 @@ MyHome::~MyHome()
  {
      if(kongtiao_on==0)
      {
-         ui->pushButton_3->setStyleSheet("border-image: url(:/image/button_kongtiao_open.png)");
-         ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_open.png)");
 
-         ui->textEdit->insertPlainText("kongtiao_on\n");
-
-         kongtiao_on=1;
-         QString data1="kongtiao_on\n";
-         tcpsocket->write(data1.toUtf8());
+         Rest *kongtiao = new Rest();
+         kongtiao->status = 700;
+         kongtiao->message = "打开空调";
+         kongtiao->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(kongtiao->toJson());
      }
      else
      {
-         ui->pushButton_3->setStyleSheet("border-image: url(:/image/button_kongtiao_close.png)");
-         ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_close(1).png)");
 
-         ui->textEdit->insertPlainText("kongtiao_off\n");
+         Rest *kongtiao = new Rest();
+         kongtiao->status = 701;
+         kongtiao->message = "关闭空调";
+         kongtiao->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(kongtiao->toJson());
 
-         kongtiao_on=0;
-         QString data1="led_off\n";
-         tcpsocket->write(data1.toUtf8());
      }
  }
 
@@ -97,45 +88,109 @@ MyHome::~MyHome()
          tcpsocket->write(data1.toUtf8());
      }
      if(led_on==1){
+     Rest *mod = new Rest();
+
      if(model%3==0)
      {
-         ui->label_2->setStyleSheet("border-image: url(:/image/light_blue.png)");
-         ui->label->setStyleSheet("border-image: url(:/image/home_blue.png)");
+         mod->status = 610;
+         mod->message = "切换模式一";
+         mod->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(mod->toJson());
 
-         ui->textEdit->insertPlainText("led_blue\n");
-         QString data1="led_blue\n";
-         tcpsocket->write(data1.toUtf8());
      }
      if(model%3==1)
      {
-         ui->label_2->setStyleSheet("border-image: url(:/image/light_yellow.png)");
-         ui->label->setStyleSheet("border-image: url(:/image/home_yellow.png)");
-
-         ui->textEdit->insertPlainText("led_yellow\n");
-         QString data1="led_yellow\n";
-         tcpsocket->write(data1.toUtf8());
+         mod->status = 620;
+         mod->message = "切换模式二";
+         mod->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(mod->toJson());
      }
      if(model%3==2)
      {
-         ui->label_2->setStyleSheet("border-image: url(:/image/light_orange.png)");
-         ui->label->setStyleSheet("border-image: url(:/image/home_orange.png)");
 
-         ui->textEdit->insertPlainText("led_orange\n");
-         QString data1="led_orange\n";
-         tcpsocket->write(data1.toUtf8());
+         mod->status = 630;
+         mod->message = "切换模式三";
+         mod->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(mod->toJson());
      }
-
-
+     model++;
      }
-
-model++;
 
  }
-
 
  //返回按钮
 
  void MyHome::on_pushButton_2_clicked()
  {
      emit signal_swap();
+ }
+
+ void MyHome::open_light(){
+
+     ui->pushButton->setStyleSheet("border-image: url(:/image/button _light open.png)");
+     ui->label_2->setStyleSheet("border-image: url(:/image/light _on.png)");
+     ui->label->setStyleSheet("border-image: url(:/image/home.png)");
+
+     ui->textEdit->insertPlainText("led_on\n");
+
+     led_on=1;
+
+ }
+
+ void MyHome::close_light(){
+     ui->pushButton->setStyleSheet("border-image: url(:/image/butoon _light close.png)");
+     ui->label_2->setStyleSheet("border-image: url(:/image/light _off.png)");
+     ui->label->setStyleSheet("border-image: url(:/image/home_dark.png)");
+
+     ui->textEdit->insertPlainText("led_off\n");
+
+     led_on=0;
+     QString data1="led_off\n";
+ }
+ void MyHome::setText(QString text){
+     ui->textEdit->insertPlainText(text);
+ }
+
+ void MyHome::switch_mod(int mod){
+     if(led_on==0)
+     {
+         ui->textEdit->insertPlainText("开灯才可以切换模式\n");
+         QString data1="需要开灯才能调换模式\n";
+     }
+     if(led_on==1){
+     if(mod==0)
+     {
+         ui->label_2->setStyleSheet("border-image: url(:/image/light_blue.png)");
+         ui->label->setStyleSheet("border-image: url(:/image/home_blue.png)");
+
+     }
+     if(mod==1)
+     {
+         ui->label_2->setStyleSheet("border-image: url(:/image/light_yellow.png)");
+         ui->label->setStyleSheet("border-image: url(:/image/home_yellow.png)");
+
+     }
+     if(mod==2)
+     {
+         ui->label_2->setStyleSheet("border-image: url(:/image/light_orange.png)");
+         ui->label->setStyleSheet("border-image: url(:/image/home_orange.png)");
+
+     }
+
+
+     }
+ }
+
+ void MyHome::open_kongtiao(){
+     ui->pushButton_3->setStyleSheet("border-image: url(:/image/button_kongtiao_open.png)");
+     ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_open.png)");
+
+     kongtiao_on=1;
+ }
+
+ void MyHome::close_kongtiao(){
+     ui->pushButton_3->setStyleSheet("border-image: url(:/image/button_kongtiao_close.png)");
+     ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_close(1).png)");
+
+     kongtiao_on=0;
  }
