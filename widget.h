@@ -17,7 +17,7 @@ public:
     ~Widget();
 
 signals :
-    void signal_mysignall(QString ip,int port);
+    void signal_mysignall(QString ip,QString port);
 
 public slots:
     void slot_swap();

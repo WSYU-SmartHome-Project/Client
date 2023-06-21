@@ -21,11 +21,11 @@ public:
     void switch_mod(int mod);
     void open_kongtiao();
     void close_kongtiao();
-
+    void on_pushButton_2_clicked();//返回按钮
 
  //声明一个槽函数，用于接收Widget对象中的数据
  public slots:
-    void slot_myfun1(QString,int);
+    void slot_myfun1(QString,QString);
 
  //界面切换信号
  signals:
@@ -33,7 +33,6 @@ public:
 
  private slots:
     void on_pushButton_clicked();//灯按钮槽函数
-    void on_pushButton_2_clicked();//返回按钮
     void on_pushButton_3_clicked();//空调按钮
     void on_pushButton_4_clicked();//灯的模式变化
 

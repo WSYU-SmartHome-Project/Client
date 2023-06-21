@@ -4,17 +4,20 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "device.h"
+#include <QMessageBox>
 
 QWebSocket *WebSocketClient::dataRecvWS = nullptr;
 
 WebSocketClient::WebSocketClient()
 {
 }
+int connecting = 0;
 
 void WebSocketClient::createWebsocketClient(QString ip,QString port,QString api){
 
     dataRecvWS = new QWebSocket();
     qDebug()<<"create websocket!";
+    connecting = 1;
     connect(dataRecvWS,&QWebSocket::disconnected,this,&WebSocketClient::onDisConnected);
     connect(dataRecvWS,&QWebSocket::textMessageReceived,this,&WebSocketClient::onTextReceived);
     connect(dataRecvWS,&QWebSocket::connected,this,&WebSocketClient::onConnected);
@@ -26,6 +29,7 @@ void WebSocketClient::createWebsocketClient(QString ip,QString port,QString api)
  * @note  当连接成功后，触发该函数
  */
 void WebSocketClient::onConnected(){
+    connecting = 0;
     Rest* rest = new Rest();
     rest->message = "connected";
     rest->status = 200;
@@ -34,8 +38,8 @@ void WebSocketClient::onConnected(){
     QJsonDocument doc(rest->toJsonObject());
     QString jsonStr(doc.toJson(QJsonDocument::Compact));
 
-    qDebug() << "DataReveive websocket is already connect!";
-    qDebug() << "Address:" << dataRecvWS->peerAddress();
+    qDebug() << "服务器已连接!";
+    qDebug() << "地址:" << dataRecvWS->peerAddress();
     dataRecvWS->sendTextMessage(jsonStr);
 }
 
@@ -54,27 +58,9 @@ void WebSocketClient::onTextReceived(QString msg){
     rest->status = jsonObject["status"].toInt();
     rest->success = jsonObject["success"].toBool();
 
-    if(rest->status == 200){
-        //返回设备信息；
-        Device *device = new Device();
-        device->status = 0;//状态码0代表已经连接
-        device->type = "client";//设备属性
+    myhomep->setText(rest->toJson()+"\n");
 
-        QJsonDocument doc(device->toJsonObject());
-        QString deviceJson(doc.toJson(QJsonDocument::Compact));
-
-        Rest* restDevice = new Rest();
-        restDevice->message = deviceJson;
-        restDevice->status = 300;//状态码300 代表返回设备信息
-        restDevice->success = true;
-
-        QJsonDocument docNew(restDevice->toJsonObject());
-        QString jsonStr(docNew.toJson(QJsonDocument::Compact));
-
-        dataRecvWS->sendTextMessage(jsonStr);
-    }
-
-    if(rest->status == 301){//入池完成
+    if(rest->status == 200){//入池完成
         qDebug() << "连接完成";
         widget->on_connected();//连接结束，跳转页面
     }
@@ -82,43 +68,35 @@ void WebSocketClient::onTextReceived(QString msg){
     if(rest->status == 600){
         //开灯命令；
         myhomep->open_light();
-        myhomep->setText(rest->toJson()+"\n");
 
     }
 
     if(rest->status == 601){
         //关灯命令；
         myhomep->close_light();
-        myhomep->setText(rest->toJson()+"\n");
 
     }
 
     //切换灯模式
     if(rest->status == 610){
         myhomep->switch_mod(0);
-        myhomep->setText(rest->toJson()+"\n");
     }
 
     if(rest->status == 620){
         myhomep->switch_mod(1);
-        myhomep->setText(rest->toJson()+"\n");
     }
 
     if(rest->status == 630){
         myhomep->switch_mod(2);
-        myhomep->setText(rest->toJson()+"\n");
     }
 
     if(rest->status == 700){
         myhomep->open_kongtiao();
-        myhomep->setText(rest->toJson()+"\n");
 
     }
 
     if(rest->status == 701){
         myhomep->close_kongtiao();
-        myhomep->setText(rest->toJson()+"\n");
-
     }
 
 
@@ -130,5 +108,9 @@ void WebSocketClient::onTextReceived(QString msg){
  * @note  当连接断开时，触发该函数
  */
 void WebSocketClient::onDisConnected(){
-    qDebug()<<"Dialog websocket is disconnected!!!";
+    qDebug()<<"连接断开";
+    if(connecting!=0){
+        QMessageBox::warning(myhomep, "网络错误", "服务器连接失败");
+    }
+    myhomep->on_pushButton_2_clicked();
 }

@@ -21,13 +21,14 @@ MyHome::~MyHome()
 }
 
 //槽函数的定义
- void MyHome::slot_myfun1(QString ip, int port)
+ void MyHome::slot_myfun1(QString ip, QString port)
  {
+     ui->textEdit->insertPlainText("地址："+ip+"；端口号："+port);
      //连接服务器
-     tcpsocket->connectToHost(ip,port);
+//     tcpsocket->connectToHost(ip,port);
 
-     int i = 100000000;//延时等待服务器链接
-     while(i--);
+//     int i = 100000000;//延时等待服务器链接
+//     while(i--);
  }
 
  //开灯关灯
@@ -145,7 +146,6 @@ MyHome::~MyHome()
      ui->textEdit->insertPlainText("led_off\n");
 
      led_on=0;
-     QString data1="led_off\n";
  }
  void MyHome::setText(QString text){
      ui->textEdit->insertPlainText(text);
