@@ -4,6 +4,9 @@
 #include "MyHome.h"
 #include "widget.h"
 #include <QtWebSockets/QWebSocket>
+/**
+ *WebSocket客户端
+ */
 namespace Ui {
 class Widget;
 }
@@ -12,7 +15,7 @@ class WebSocketClient : public QWidget
 {
 public:
     WebSocketClient();
-    static QWebSocket *dataRecvWS;     /*-<websocket类 */
+    static QWebSocket *dataRecvWS;     //-<websocket类 静态，
     void setWidget(Widget *w){
         widget = w;
     }

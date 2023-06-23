@@ -109,8 +109,7 @@ void WebSocketClient::onTextReceived(QString msg){
  */
 void WebSocketClient::onDisConnected(){
     qDebug()<<"连接断开";
-    if(connecting!=0){
-        QMessageBox::warning(myhomep, "网络错误", "服务器连接失败");
-    }
+    QMessageBox::warning(myhomep, "网络错误", "服务器连接失败");
+
     myhomep->on_pushButton_2_clicked();
 }

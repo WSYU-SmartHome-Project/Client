@@ -17,6 +17,7 @@ public:
         return obj;
     }
 
+    //将对象转为Json
     QString toJson() const {
         QJsonObject obj;
         obj["message"] = message;
