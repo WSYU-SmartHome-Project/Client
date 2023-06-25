@@ -68,7 +68,28 @@ MyHome::~MyHome()
 
      }
  }
+ void MyHome::on_pushButton_5_clicked()
+ {
+     if(fengming_on==0)
+     {
 
+         Rest *kongtiao = new Rest();
+         kongtiao->command = 702;
+         kongtiao->message = "打开蜂鸣";
+         kongtiao->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(kongtiao->toJson());
+     }
+     else
+     {
+
+         Rest *kongtiao = new Rest();
+         kongtiao->command = 703;
+         kongtiao->message = "关闭蜂鸣";
+         kongtiao->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(kongtiao->toJson());
+
+     }
+ }
  //灯的模式变化
 
  void MyHome::on_pushButton_4_clicked()
@@ -181,4 +202,17 @@ MyHome::~MyHome()
      ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_close(1).png)");
 
      kongtiao_on=0;
+ }
+ void MyHome::open_fengming(){
+     ui->pushButton_5->setStyleSheet("border-image: url(:/image/button_kongtiao_open.png)");
+     ui->label_5->setStyleSheet("border-image: url(:/image/fengming_open.png)");
+
+     fengming_on=1;
+ }
+
+ void MyHome::close_fengming(){
+     ui->pushButton_6->setStyleSheet("border-image: url(:/image/button_kongtiao_close(1).png)");
+     ui->label_5->setStyleSheet("border-image: url(:/image/fengming_close.png)");
+
+     fengming_on=0;
  }
