@@ -98,7 +98,14 @@ void WebSocketClient::onTextReceived(QString msg){
     if(rest->command == 701){
         myhomep->close_kongtiao();
     }
+    if(rest->command == 702){
+        myhomep->open_fengming();
 
+    }
+
+    if(rest->command == 703){
+        myhomep->close_fengming();
+    }
 
 
 }

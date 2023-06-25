@@ -9,13 +9,15 @@
         <file>image/home_blue.png</file>
         <file>image/home_orange.png</file>
         <file>image/home_yellow.png</file>
-        <file>image/kongtiao_close(1).png</file>
-        <file>image/kongtiao_open.png</file>
         <file>image/light _off.png</file>
         <file>image/light _on.png</file>
         <file>image/light_blue.png</file>
         <file>image/light_orange.png</file>
         <file>image/home_dark.png</file>
         <file>image/light_yellow.png</file>
+        <file>image/fengming_open.png</file>
+        <file>image/fengming_close.png</file>
+        <file>image/kongtiao_close(1).png</file>
+        <file>image/kongtiao_open.png</file>
     </qresource>
 </RCC>

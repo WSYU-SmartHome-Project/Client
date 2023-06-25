@@ -21,6 +21,8 @@ public:
     void switch_mod(int mod);
     void open_kongtiao();
     void close_kongtiao();
+    void open_fengming();
+    void close_fengming();
     int closeType = 0;
 
  //声明一个槽函数，用于接收Widget对象中的数据
@@ -37,6 +39,7 @@ public:
     void on_pushButton_clicked();//灯按钮槽函数
     void on_pushButton_3_clicked();//空调按钮
     void on_pushButton_4_clicked();//灯的模式变化
+    void on_pushButton_5_clicked();//蜂鸣开关
 
 
 private:
@@ -44,6 +47,7 @@ private:
     int led_on = 0;
     int kongtiao_on=0;
     int model=0;
+    int fengming_on=0;
     QTcpSocket *tcpsocket;//声明了一个名为tcpsocket的指向QTcpsocket类型的指针
 
 
