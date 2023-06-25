@@ -32,7 +32,7 @@ void WebSocketClient::onConnected(){
     connecting = 0;
     Rest* rest = new Rest();
     rest->message = "connected";
-    rest->status = 200;
+    rest->command = 200;
     rest->success = true;
 
     QJsonDocument doc(rest->toJsonObject());
@@ -55,47 +55,47 @@ void WebSocketClient::onTextReceived(QString msg){
     QJsonObject jsonObject = jsonDoc.object();
     Rest * rest = new Rest();
     rest->message = jsonObject["message"].toString();
-    rest->status = jsonObject["status"].toInt();
+    rest->command = jsonObject["command"].toInt();
     rest->success = jsonObject["success"].toBool();
 
     myhomep->setText(rest->toJson()+"\n");
 
-    if(rest->status == 200){//入池完成
+    if(rest->command == 200){//入池完成
         qDebug() << "连接完成";
         widget->on_connected();//连接结束，跳转页面
     }
 
-    if(rest->status == 600){
+    if(rest->command == 600){
         //开灯命令；
         myhomep->open_light();
 
     }
 
-    if(rest->status == 601){
+    if(rest->command == 601){
         //关灯命令；
         myhomep->close_light();
 
     }
 
     //切换灯模式
-    if(rest->status == 610){
+    if(rest->command == 610){
         myhomep->switch_mod(0);
     }
 
-    if(rest->status == 620){
+    if(rest->command == 620){
         myhomep->switch_mod(1);
     }
 
-    if(rest->status == 630){
+    if(rest->command == 630){
         myhomep->switch_mod(2);
     }
 
-    if(rest->status == 700){
+    if(rest->command == 700){
         myhomep->open_kongtiao();
 
     }
 
-    if(rest->status == 701){
+    if(rest->command == 701){
         myhomep->close_kongtiao();
     }
 
@@ -109,7 +109,10 @@ void WebSocketClient::onTextReceived(QString msg){
  */
 void WebSocketClient::onDisConnected(){
     qDebug()<<"连接断开";
-    QMessageBox::warning(myhomep, "网络错误", "服务器连接失败");
+    if(myhomep->closeType!=1){
+        QMessageBox::warning(myhomep, "网络错误", "服务器连接失败");
+        myhomep->on_pushButton_2_clicked();
+    }
+    myhomep->closeType = 0;
 
-    myhomep->on_pushButton_2_clicked();
 }

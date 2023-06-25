@@ -9,10 +9,6 @@ MyHome::MyHome(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    tcpsocket = new QTcpSocket;//通过new运算符创建新的QTcpsocket对象，并将其分配给tcpsocket指针
-
-    //判断是否连接成功
-    connect(tcpsocket,&QTcpSocket::connected,this,[=](){ui->label_3->setText("connect ok");});
 }
 
 MyHome::~MyHome()
@@ -23,12 +19,7 @@ MyHome::~MyHome()
 //槽函数的定义
  void MyHome::slot_myfun1(QString ip, QString port)
  {
-     ui->textEdit->insertPlainText("地址："+ip+"；端口号："+port);
-     //连接服务器
-//     tcpsocket->connectToHost(ip,port);
-
-//     int i = 100000000;//延时等待服务器链接
-//     while(i--);
+     ui->textEdit->insertPlainText("地址："+ip+"；端口号："+port+"\n");
  }
 
  //开灯关灯
@@ -38,7 +29,7 @@ MyHome::~MyHome()
      if(led_on==0)
      {
          Rest *open_light = new Rest();
-         open_light->status = 600;
+         open_light->command = 600;
          open_light->message = "开灯";
          open_light->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(open_light->toJson());
@@ -46,7 +37,7 @@ MyHome::~MyHome()
      else
      {
          Rest *open_light = new Rest();
-         open_light->status = 601;
+         open_light->command = 601;
          open_light->message = "关灯";
          open_light->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(open_light->toJson());
@@ -61,7 +52,7 @@ MyHome::~MyHome()
      {
 
          Rest *kongtiao = new Rest();
-         kongtiao->status = 700;
+         kongtiao->command = 700;
          kongtiao->message = "打开空调";
          kongtiao->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(kongtiao->toJson());
@@ -70,7 +61,7 @@ MyHome::~MyHome()
      {
 
          Rest *kongtiao = new Rest();
-         kongtiao->status = 701;
+         kongtiao->command = 701;
          kongtiao->message = "关闭空调";
          kongtiao->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(kongtiao->toJson());
@@ -86,14 +77,13 @@ MyHome::~MyHome()
      {
          ui->textEdit->insertPlainText("开灯才可以切换模式\n");
          QString data1="需要开灯才能调换模式\n";
-         tcpsocket->write(data1.toUtf8());
      }
      if(led_on==1){
      Rest *mod = new Rest();
 
      if(model%3==0)
      {
-         mod->status = 610;
+         mod->command = 610;
          mod->message = "切换模式一";
          mod->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(mod->toJson());
@@ -101,7 +91,7 @@ MyHome::~MyHome()
      }
      if(model%3==1)
      {
-         mod->status = 620;
+         mod->command = 620;
          mod->message = "切换模式二";
          mod->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(mod->toJson());
@@ -109,7 +99,7 @@ MyHome::~MyHome()
      if(model%3==2)
      {
 
-         mod->status = 630;
+         mod->command = 630;
          mod->message = "切换模式三";
          mod->success = true;
          WebSocketClient::dataRecvWS->sendTextMessage(mod->toJson());
@@ -123,7 +113,9 @@ MyHome::~MyHome()
 
  void MyHome::on_pushButton_2_clicked()
  {
+     closeType = 1;
      emit signal_swap();
+     WebSocketClient::dataRecvWS->close();
  }
 
  void MyHome::open_light(){
@@ -131,8 +123,6 @@ MyHome::~MyHome()
      ui->pushButton->setStyleSheet("border-image: url(:/image/button _light open.png)");
      ui->label_2->setStyleSheet("border-image: url(:/image/light _on.png)");
      ui->label->setStyleSheet("border-image: url(:/image/home.png)");
-
-     ui->textEdit->insertPlainText("led_on\n");
 
      led_on=1;
 
@@ -142,8 +132,6 @@ MyHome::~MyHome()
      ui->pushButton->setStyleSheet("border-image: url(:/image/butoon _light close.png)");
      ui->label_2->setStyleSheet("border-image: url(:/image/light _off.png)");
      ui->label->setStyleSheet("border-image: url(:/image/home_dark.png)");
-
-     ui->textEdit->insertPlainText("led_off\n");
 
      led_on=0;
  }

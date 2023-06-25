@@ -6,13 +6,13 @@
 class Rest{
 public:
     QString message;
-    int status;
+    int command;
     bool success;
 
     QJsonObject toJsonObject() const {
         QJsonObject obj;
         obj["message"] = message;
-        obj["status"] = status;
+        obj["command"] = command;
         obj["success"] = success;
         return obj;
     }
@@ -21,7 +21,7 @@ public:
     QString toJson() const {
         QJsonObject obj;
         obj["message"] = message;
-        obj["status"] = status;
+        obj["command"] = command;
         obj["success"] = success;
         QJsonDocument doc(obj);
         QString jsonStr(doc.toJson(QJsonDocument::Compact));

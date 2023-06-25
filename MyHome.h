@@ -21,11 +21,13 @@ public:
     void switch_mod(int mod);
     void open_kongtiao();
     void close_kongtiao();
-    void on_pushButton_2_clicked();//返回按钮
+    int closeType = 0;
 
  //声明一个槽函数，用于接收Widget对象中的数据
  public slots:
     void slot_myfun1(QString,QString);
+    void on_pushButton_2_clicked();//返回按钮
+
 
  //界面切换信号
  signals:
