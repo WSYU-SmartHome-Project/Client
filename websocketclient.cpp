@@ -107,7 +107,13 @@ void WebSocketClient::onTextReceived(QString msg){
         myhomep->close_fengming();
     }
 
+    if(rest->command == 8){
+        myhomep->addTp();
+    }
 
+    if(rest->command == 2){
+        myhomep->subTp();
+    }
 }
 
 /**

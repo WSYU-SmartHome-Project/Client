@@ -19,5 +19,7 @@
         <file>image/fengming_close.png</file>
         <file>image/kongtiao_close(1).png</file>
         <file>image/kongtiao_open.png</file>
+        <file>image/down.png</file>
+        <file>image/up.png</file>
     </qresource>
 </RCC>

@@ -8,6 +8,10 @@ MyHome::MyHome(QWidget *parent) :
     ui(new Ui::MyHome)
 {
     ui->setupUi(this);
+    ui->tp_display->close();
+    ui->tp_display->setSegmentStyle(QLCDNumber::Flat);
+
+
 
 }
 
@@ -139,6 +143,46 @@ MyHome::~MyHome()
      WebSocketClient::dataRecvWS->close();
  }
 
+ void MyHome::on_add_clicked(){
+     if(kongtiao_on == 1){
+
+         Rest *command = new Rest();
+         command->command = 8;
+         command->message = "温度增加";
+         command->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(command->toJson());
+     }else{
+         ui->textEdit->insertPlainText("请先打开空调\n");
+     }
+
+
+ }
+
+ void MyHome::on_sub_clicked(){
+     if(kongtiao_on == 1){
+         Rest *command = new Rest();
+         command->command = 2;
+         command->message = "温度降低";
+         command->success = true;
+         WebSocketClient::dataRecvWS->sendTextMessage(command->toJson());
+     }else{
+         ui->textEdit->insertPlainText("请先打开空调\n");
+     }
+
+ }
+
+ void MyHome::addTp(){
+     ++tp;
+     qDebug()<<tp;
+     ui->tp_display->display(tp);
+ }
+
+ void MyHome::subTp(){
+     --tp;
+     qDebug()<<tp;
+     ui->tp_display->display(tp);
+ }
+
  void MyHome::open_light(){
 
      ui->pushButton->setStyleSheet("border-image: url(:/image/button _light open.png)");
@@ -193,14 +237,15 @@ MyHome::~MyHome()
  void MyHome::open_kongtiao(){
      ui->pushButton_3->setStyleSheet("border-image: url(:/image/button_kongtiao_open.png)");
      ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_open.png)");
-
+     ui->tp_display->display(tp);
+     ui->tp_display->show();
      kongtiao_on=1;
  }
 
  void MyHome::close_kongtiao(){
      ui->pushButton_3->setStyleSheet("border-image: url(:/image/button_kongtiao_close.png)");
      ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_close(1).png)");
-
+     ui->tp_display->close();
      kongtiao_on=0;
  }
  void MyHome::open_fengming(){
