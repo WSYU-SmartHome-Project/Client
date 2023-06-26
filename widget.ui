@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>ip</string>
+    <string>登录IP</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>port</string>
+    <string>端口号</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEdit">
@@ -69,9 +69,28 @@
     </rect>
    </property>
    <property name="text">
-    <string>connect</string>
+    <string>连接</string>
    </property>
   </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>401</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image:url(:/image/login.png)</string>
+   </property>
+  </widget>
+  <zorder>widget</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>lineEdit</zorder>
+  <zorder>lineEdit_2</zorder>
+  <zorder>pushButton</zorder>
  </widget>
  <resources/>
  <connections/>

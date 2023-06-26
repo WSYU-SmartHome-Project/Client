@@ -21,5 +21,6 @@
         <file>image/kongtiao_open.png</file>
         <file>image/down.png</file>
         <file>image/up.png</file>
+        <file>image/login.png</file>
     </qresource>
 </RCC>
