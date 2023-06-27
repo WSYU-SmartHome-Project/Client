@@ -34,6 +34,7 @@ void WebSocketClient::onConnected(){
     rest->message = "connected";
     rest->command = 200;
     rest->success = true;
+    rest->type = 0;
 
     QJsonDocument doc(rest->toJsonObject());
     QString jsonStr(doc.toJson(QJsonDocument::Compact));

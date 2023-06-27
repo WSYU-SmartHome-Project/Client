@@ -173,14 +173,24 @@ MyHome::~MyHome()
 
  void MyHome::addTp(){
      ++tp;
-     qDebug()<<tp;
      ui->tp_display->display(tp);
+     Rest *command = new Rest();
+     command->command = 101;
+     QString tp_s = QString::number(tp);
+     command->message = tp_s;
+     command->success = true;
+     WebSocketClient::dataRecvWS->sendTextMessage(command->toJson());
  }
 
  void MyHome::subTp(){
      --tp;
-     qDebug()<<tp;
      ui->tp_display->display(tp);
+     Rest *command = new Rest();
+     command->command = 102;
+     QString tp_s = QString::number(tp);
+     command->message = tp_s;
+     command->success = true;
+     WebSocketClient::dataRecvWS->sendTextMessage(command->toJson());
  }
 
  void MyHome::open_light(){
@@ -191,6 +201,14 @@ MyHome::~MyHome()
 
      led_on=1;
 
+     Rest *result = new Rest();
+     result->command = 501;
+     result->message = "开灯完成";
+     result->success = true;
+
+     WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
+
+
  }
 
  void MyHome::close_light(){
@@ -199,6 +217,13 @@ MyHome::~MyHome()
      ui->label->setStyleSheet("border-image: url(:/image/home_dark.png)");
 
      led_on=0;
+
+     Rest *result = new Rest();
+     result->command = 502;
+     result->message = "关灯完成";
+     result->success = true;
+
+     WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
  }
  void MyHome::setText(QString text){
      ui->textEdit->insertPlainText(text);
@@ -216,17 +241,38 @@ MyHome::~MyHome()
          ui->label_2->setStyleSheet("border-image: url(:/image/light_blue.png)");
          ui->label->setStyleSheet("border-image: url(:/image/home_blue.png)");
 
+         Rest *result = new Rest();
+         result->command = 511;
+         result->message = "模式1";
+         result->success = true;
+
+         WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
+
      }
      if(mod==1)
      {
          ui->label_2->setStyleSheet("border-image: url(:/image/light_yellow.png)");
          ui->label->setStyleSheet("border-image: url(:/image/home_yellow.png)");
 
+         Rest *result = new Rest();
+         result->command = 512;
+         result->message = "模式2";
+         result->success = true;
+
+         WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
+
      }
      if(mod==2)
      {
          ui->label_2->setStyleSheet("border-image: url(:/image/light_orange.png)");
          ui->label->setStyleSheet("border-image: url(:/image/home_orange.png)");
+
+         Rest *result = new Rest();
+         result->command = 513;
+         result->message = "模式3";
+         result->success = true;
+
+         WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
 
      }
 
@@ -240,6 +286,13 @@ MyHome::~MyHome()
      ui->tp_display->display(tp);
      ui->tp_display->show();
      kongtiao_on=1;
+
+     Rest *result = new Rest();
+     result->command = 521;
+     result->message = "空调开启";
+     result->success = true;
+
+     WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
  }
 
  void MyHome::close_kongtiao(){
@@ -247,12 +300,27 @@ MyHome::~MyHome()
      ui->label_4->setStyleSheet("border-image: url(:/image/kongtiao_close(1).png)");
      ui->tp_display->close();
      kongtiao_on=0;
+
+
+     Rest *result = new Rest();
+     result->command = 522;
+     result->message = "空调关闭";
+     result->success = true;
+
+     WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
  }
  void MyHome::open_fengming(){
      ui->pushButton_5->setStyleSheet("border-image: url(:/image/button_kongtiao_open.png)");
      ui->label_5->setStyleSheet("border-image: url(:/image/fengming_open.png)");
 
      fengming_on=1;
+
+     Rest *result = new Rest();
+     result->command = 666;
+     result->message = "蜂鸣开启";
+     result->success = true;
+
+     WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
  }
 
  void MyHome::close_fengming(){
@@ -260,4 +328,11 @@ MyHome::~MyHome()
      ui->label_5->setStyleSheet("border-image: url(:/image/fengming_close.png)");
 
      fengming_on=0;
+
+     Rest *result = new Rest();
+     result->command = 667;
+     result->message = "蜂鸣关闭";
+     result->success = true;
+
+     WebSocketClient::dataRecvWS->sendTextMessage(result->toJson());
  }
